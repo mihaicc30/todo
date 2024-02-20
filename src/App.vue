@@ -12,26 +12,39 @@ watch(counter, (newValue, oldValue) => {
 
 let showRemoveButton = ref(false);
 
+let newUserInput = ref("");
 let newTaskInput = ref("");
 
-let users = ref([{ name: "Mihai", role: "JSD" }]);
+let users = ref([
+  { name: "Mihai", role: "JSD" },
+  { name: "Joe", role: "JSD" },
+  { name: "Dan", role: "JSD" },
+]);
 // JSD == junior software developer
+
+const addNewUser = () => {
+  users.value.push({ name: newUserInput.value, role: "JSD" });
+  newUserInput.value = "";
+};
 
 let todo = ref([
   {
     completed: false,
     taskName: "Work on A",
     assignedToDo: [],
+    list: "todo",
   },
   {
     completed: false,
     taskName: "Work on B",
     assignedToDo: [{ name: "Mihai", role: "JSD" }],
+    list: "todo",
   },
   {
     completed: false,
     taskName: "Work on C",
     assignedToDo: [],
+    list: "todo",
   },
 ]);
 let doing = ref([]);
@@ -41,27 +54,67 @@ const removeUser = (userToRemove, fromList, taskName) => {
   console.log(
     `trying to remove ${userToRemove.name} from TN:${taskName} - ${fromList}`
   );
+  switch (fromList) {
+    case "todo":
+      const todoTaskExists = todo.value.some(
+        (task) => task.taskName === taskName
+      );
+      if (todoTaskExists) {
+        todo.value = todo.value.map((tasky) => {
+          if (tasky.taskName === taskName) {
+            return {
+              ...tasky,
+              assignedToDo: tasky.assignedToDo.filter(
+                (ATD) => ATD.name !== userToRemove.name
+              ),
+            };
+          } else {
+            return tasky;
+          }
+        });
+      }
+      break;
+    case "doing":
+      const doingTaskExists = doing.value.some(
+        (task) => task.taskName === taskName
+      );
+      if (doingTaskExists) {
+        doing.value = doing.value.map((tasky) => {
+          if (tasky.taskName === taskName) {
+            return {
+              ...tasky,
+              assignedToDo: tasky.assignedToDo.filter(
+                (ATD) => ATD.name !== userToRemove.name
+              ),
+            };
+          } else {
+            return tasky;
+          }
+        });
+      }
+      break;
+    case "done":
+      const doneTaskExists = done.value.some(
+        (task) => task.taskName === taskName
+      );
+      if (doneTaskExists) {
+        done.value = done.value.map((tasky) => {
+          if (tasky.taskName === taskName) {
+            return {
+              ...tasky,
+              assignedToDo: tasky.assignedToDo.filter(
+                (ATD) => ATD.name !== userToRemove.name
+              ),
+            };
+          } else {
+            return tasky;
+          }
+        });
+      }
+      break;
 
-  if (fromList === "todo") {
-    // Check if taskName exists in the tasks
-    const taskExists = todo.value.some((task) => task.taskName === taskName);
-
-    if (taskExists) {
-      todo.value = todo.value.map((tasky) => {
-        if (tasky.taskName === taskName) {
-          return {
-            ...tasky,
-            assignedToDo: tasky.assignedToDo.filter(
-              (ATD) => ATD.name !== userToRemove.name
-            ),
-          };
-        } else {
-          return tasky;
-        }
-      });
-    } else {
-      console.error(`Task ${taskName} not found.`);
-    }
+    default:
+      break;
   }
 };
 
@@ -70,6 +123,7 @@ const addNewTask = () => {
     completed: false,
     taskName: newTaskInput.value,
     assignedToDo: [],
+    list: "todo",
   });
   newTaskInput.value = "";
 };
@@ -105,19 +159,64 @@ const dropHandler = (targetList, event, task) => {
 };
 
 const addUser = (userToAdd, toList, taskName) => {
-  const targetTask = todo.value.find((task) => task.taskName === taskName);
-  const userExists = targetTask.assignedToDo.some(
-    (existingUser) => existingUser.name === userToAdd.name
-  );
+  switch (toList) {
+    case "todo":
+      const todoTargetTask = todo.value.find(
+        (task) => task.taskName === taskName
+      );
+      const userExists = todoTargetTask.assignedToDo.some(
+        (existingUser) => existingUser.name === userToAdd.name
+      );
 
-  if (!userExists) {
-    targetTask.assignedToDo.push({
-      name: userToAdd.name,
-      role: userToAdd.role,
-    });
-    console.log("✅ Assigned task to user.");
-  } else {
-    console.log("⛔ User already assigned.");
+      if (!userExists) {
+        todoTargetTask.assignedToDo.push({
+          name: userToAdd.name,
+          role: userToAdd.role,
+        });
+        console.log("✅ Assigned task to user.");
+      } else {
+        console.log("⛔ User already assigned.");
+      }
+      break;
+    case "doing":
+      const doingTargetTask = doing.value.find(
+        (task) => task.taskName === taskName
+      );
+      const userExists1 = doingTargetTask.assignedToDo.some(
+        (existingUser) => existingUser.name === userToAdd.name
+      );
+
+      if (!userExists1) {
+        doingTargetTask.assignedToDo.push({
+          name: userToAdd.name,
+          role: userToAdd.role,
+        });
+        console.log("✅ Assigned task to user.");
+      } else {
+        console.log("⛔ User already assigned.");
+      }
+      break;
+    case "done":
+      const doneTargetTask = done.value.find(
+        (task) => task.taskName === taskName
+      );
+      const userExists2 = doneTargetTask.assignedToDo.some(
+        (existingUser) => existingUser.name === userToAdd.name
+      );
+
+      if (!userExists2) {
+        doneTargetTask.assignedToDo.push({
+          name: userToAdd.name,
+          role: userToAdd.role,
+        });
+        console.log("✅ Assigned task to user.");
+      } else {
+        console.log("⛔ User already assigned.");
+      }
+      break;
+
+    default:
+      break;
   }
 };
 
@@ -134,31 +233,102 @@ const clearHoveredTaskElement = () => {
 };
 
 const startDraggingTask = (task) => {
-  draggingElement.value = task;
+  console.log("🚀 ~ startDraggingTask ~ task:", task);
+  draggingTaskElement.value = task;
 };
 const stopDraggingTask = () => {
-  draggingElement.value = null;
+  console.log("🚀 ~ stopDraggingTask ~ task:", draggingTaskElement);
+  draggingTaskElement.value = null;
 };
 
-const dropTaskHandler = (targetList, event, task) => {
-  event.preventDefault();
+const dropTaskHandler = (list) => {
+  console.log("🚀 Dropping on list:", list);
+  // event.preventDefault();
+  if (draggingTaskElement.value) {
+    // Assuming 'list' is an array in the props
+    const index = todo.value.indexOf(draggingTaskElement.value);
+    console.log(">>>>>> ", draggingTaskElement.value.list);
 
-  if (draggingElement.value) {
-    // Implement your logic to move the user to the target list
-    addUser(draggingElement.value, targetList, task.taskName);
+    // remove task from initial group
+    removeTaskFromInitialGroup(
+      draggingTaskElement.value.list,
+      draggingTaskElement.value.taskName
+    );
+    addTaskToGroup(list, draggingTaskElement.value);
   }
 
-  clearHoveredElement();
+  clearHoveredTaskElement();
+};
+
+const removeTaskFromInitialGroup = (list, task) => {
+  switch (list) {
+    case "todo":
+      todo.value = todo.value.filter((tasky) => tasky.taskName !== task);
+      break;
+    case "doing":
+      doing.value = doing.value.filter((tasky) => tasky.taskName !== task);
+      break;
+    case "done":
+      done.value = done.value.filter((tasky) => tasky.taskName !== task);
+      break;
+    default:
+      break;
+  }
+};
+
+const addTaskToGroup = (list, task) => {
+  switch (list) {
+    case "todo":
+      todo.value.push({
+        ...task,
+        list: list,
+      });
+      break;
+    case "doing":
+      doing.value.push({
+        ...task,
+        list: list,
+      });
+      break;
+    case "done":
+      done.value.push({
+        ...task,
+        list: list,
+      });
+      break;
+    default:
+      break;
+  }
 };
 </script>
 
 <template>
   <p class="text-center font-bold text-5xl my-4">To Do App</p>
+
+  <div class="flex flex-nowrap">
+    <button
+      v-if="newUserInput.length > 0"
+      @click="newUserInput = ''"
+      class="p-2 ml-2"
+    >
+      ✖
+    </button>
+    <input
+      type="text"
+      v-model="newUserInput"
+      placeholder="New user..."
+      class="m-4 p-4 border-b-2 w-full"
+    />
+    <button v-if="newUserInput.length > 0" @click="addNewUser" class="p-2 mr-2">
+      ▶
+    </button>
+  </div>
+
   <div class="flex px-4">
     <!-- LIST OF AVAILABLE USERS -->
     <div
       v-for="user in users"
-      class="flex flex-col border-2 aspect-square px-3 p-1 m-1 text-xs items-center justify-center rounded-full"
+      class="flex flex-col border-2 h-20 w-20 m-1 text-xs items-center justify-center rounded-full"
       draggable="true"
       @dragstart="startDraggingUser(user)"
       @dragend="stopDraggingUser"
@@ -189,11 +359,21 @@ const dropTaskHandler = (targetList, event, task) => {
   </div>
 
   <div class="grid grid-cols-3 gap-4 px-4">
-    <div class="flex flex-col gap-2 border-2 p-2" id="todo">
+    <div
+      @dragenter="logHoveredTaskElement('todo')"
+      @dragover.prevent
+      @drop="dropTaskHandler('todo')"
+      @dragleave="clearHoveredTaskElement"
+      class="flex flex-col gap-2 border-2 p-2"
+      id="todo"
+    >
       <p class="text-center mb-2 border-b-2">To Do</p>
       <!-- LIST OF TO-DO TASKS -->
       <div v-for="task in todo" class="flex flex-col gap-2">
         <div
+          draggable="true"
+          @dragstart="startDraggingTask(task)"
+          @dragend="stopDraggingTask"
           :class="{ 'line-through': task.completed }"
           @click="task.completed = !task.completed"
           class="flex flex-nowrap gap-2"
@@ -206,24 +386,37 @@ const dropTaskHandler = (targetList, event, task) => {
           <p>{{ task.taskName }}</p>
         </div>
         <div
-          class="grid max-h-[64px]"
-          :class="`grid-cols-${task.assignedToDo.length}`"
+          @dragenter="logHoveredElement(task.taskName, 'todo')"
+          @dragover.prevent
+          @drop="dropHandler('todo', $event, task)"
+          @dragleave="clearHoveredElement"
+          class="grid max-h-[80px] justify-items-center gap-2"
+          :class="`grid-cols-4`"
         >
+          <!-- LIST OF USERS ASSIGNED TO THE TASK -->
           <div
             v-if="task.assignedToDo.length > 0"
             v-for="user in task.assignedToDo"
             :key="user.name"
-            class="max-h-[64px] relative flex flex-col aspect-square px-5 py-2 text-xs items-center justify-center rounded-full"
-            @mouseenter="showRemoveButton = true"
-            @mouseleave="showRemoveButton = false"
+            class="relative flex flex-nowrap gap-x-2 border-2 m-1 p-2 text-xs items-center justify-center rounded-lg"
+            @mouseenter="
+              showRemoveButton = {
+                userName: user.name,
+                taskName: task.taskName,
+              }
+            "
+            @mouseleave="showRemoveButton = null"
           >
             🐱
-            <p class="text-[8px]">{{ user.role }}</p>
             <p>{{ user.name }}</p>
             <button
-              v-if="showRemoveButton"
+              v-if="
+                showRemoveButton &&
+                showRemoveButton.userName === user.name &&
+                showRemoveButton.taskName === task.taskName
+              "
               @click="removeUser(user, 'todo', task.taskName)"
-              class="bg-white/50 rounded-full p-1 mt-1 absolute inset-0 text-3xl font-bold"
+              class="bg-white/50 rounded-full absolute w-full h-full text-3xl font-bold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center"
             >
               X
             </button>
@@ -240,6 +433,57 @@ const dropTaskHandler = (targetList, event, task) => {
       id="doing"
     >
       <p class="text-center mb-2 border-b-2">Doing</p>
+      <!-- LIST OF DOING TASKS -->
+      <div v-for="task in doing" class="flex flex-col gap-2 cursor-pointer">
+        <div
+          draggable="true"
+          @dragstart="startDraggingTask(task)"
+          @dragend="stopDraggingTask"
+          :class="{ 'line-through': task.completed }"
+          @click="task.completed = !task.completed"
+          class="flex flex-nowrap gap-2"
+          @dragenter="logHoveredElement(task.taskName, 'doing')"
+          @dragover.prevent
+          @drop="dropHandler('doing', $event, task)"
+          @dragleave="clearHoveredElement"
+        >
+          <input type="checkbox" v-model="task.completed" />
+          <p>{{ task.taskName }}</p>
+        </div>
+        <div
+          class="grid max-h-[80px] justify-items-center"
+          :class="`grid-cols-4`"
+        >
+          <!-- LIST OF USERS ASSIGNED TO THE TASK -->
+          <div
+            v-if="task.assignedToDo.length > 0"
+            v-for="user in task.assignedToDo"
+            :key="user.name"
+            class="relative flex flex-nowrap gap-x-2 border-2 m-1 p-2 text-xs items-center justify-center rounded-lg"
+            @mouseenter="
+              showRemoveButton = {
+                userName: user.name,
+                taskName: task.taskName,
+              }
+            "
+            @mouseleave="showRemoveButton = null"
+          >
+            🐱
+            <p>{{ user.name }}</p>
+            <button
+              v-if="
+                showRemoveButton &&
+                showRemoveButton.userName === user.name &&
+                showRemoveButton.taskName === task.taskName
+              "
+              @click="removeUser(user, 'doing', task.taskName)"
+              class="bg-white/50 rounded-full absolute w-full h-full text-3xl font-bold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center"
+            >
+              X
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       @dragenter="logHoveredTaskElement('done')"
@@ -250,6 +494,57 @@ const dropTaskHandler = (targetList, event, task) => {
       id="done"
     >
       <p class="text-center mb-2 border-b-2">Done</p>
+      <!-- LIST OF DONE TASKS -->
+      <div v-for="task in done" class="flex flex-col gap-2">
+        <div
+          draggable="true"
+          @dragstart="startDraggingTask(task)"
+          @dragend="stopDraggingTask"
+          :class="{ 'line-through': task.completed }"
+          @click="task.completed = !task.completed"
+          class="flex flex-nowrap gap-2"
+          @dragenter="logHoveredElement(task.taskName, 'done')"
+          @dragover.prevent
+          @drop="dropHandler('done', $event, task)"
+          @dragleave="clearHoveredElement"
+        >
+          <input type="checkbox" v-model="task.completed" />
+          <p>{{ task.taskName }}</p>
+        </div>
+        <div
+          class="grid max-h-[80px] justify-items-center"
+          :class="`grid-cols-4`"
+        >
+          <!-- LIST OF USERS ASSIGNED TO THE TASK -->
+          <div
+            v-if="task.assignedToDo.length > 0"
+            v-for="user in task.assignedToDo"
+            :key="user.name"
+            class="relative flex flex-nowrap gap-x-2 border-2 m-1 p-2 text-xs items-center justify-center rounded-lg"
+            @mouseenter="
+              showRemoveButton = {
+                userName: user.name,
+                taskName: task.taskName,
+              }
+            "
+            @mouseleave="showRemoveButton = null"
+          >
+            🐱
+            <p>{{ user.name }}</p>
+            <button
+              v-if="
+                showRemoveButton &&
+                showRemoveButton.userName === user.name &&
+                showRemoveButton.taskName === task.taskName
+              "
+              @click="removeUser(user, 'done', task.taskName)"
+              class="bg-white/50 rounded-full absolute w-full h-full text-3xl font-bold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center"
+            >
+              X
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
