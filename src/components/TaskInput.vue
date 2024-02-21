@@ -18,7 +18,7 @@ const addNewTask = () => {
 </script>
 
 <template>
-  <div class="flex flex-nowrap px-4">
+  <div class="flex flex-nowrap gap-2 px-4">
     <button
       v-if="newTaskInput.length > 0"
       @click="newTaskInput = ''"
@@ -31,7 +31,7 @@ const addNewTask = () => {
       v-model="newTaskInput"
       @keyup.enter="addNewTask"
       placeholder="New task..."
-      class="m-4 p-4 border-b-2 w-full outline-none"
+      class="p-4 border-b-2 w-full outline-none"
       :class="{
         'border-red-400': newTaskInput.length > 0 && newTaskInput.length < 3,
       }"

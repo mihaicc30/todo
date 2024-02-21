@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const { users } = defineProps(["users"]);
 
@@ -36,15 +36,12 @@ const isUserNameUnique = (userName) => {
     <button
       v-if="newUserRoleInput.length > 0 || newUserInput.length > 0"
       @click="clearInputs"
-      class="p-2 ml-2 border-2 rounded-lg"
+      class="p-2 border-2 rounded-lg"
     >
       ✖
     </button>
     <div
       class="flex gap-4 grow max-sm:flex-col my-4"
-      :class="{
-        'mx-20': newUserRoleInput.length < 1 && newUserInput.length < 1,
-      }"
     >
       <input
         type="text"

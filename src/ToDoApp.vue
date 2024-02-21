@@ -1,7 +1,7 @@
 <script setup>
-import TaskInput from "./components/TaskInput.vue";
-import ToDoList from "./components/ToDoList.vue";
-import UsersList from "./components/UsersList.vue";
+import TaskInput from "@/components/TaskInput.vue";
+import ToDoList from "@/components/ToDoList.vue";
+import UsersList from "@/components/UsersList.vue";
 
 // useState
 import { ref } from "vue";
@@ -263,8 +263,13 @@ const addTaskToGroup = (list, task) => {
 </script>
 
 <template>
+  <p class="px-4 font-[600]">Add new user</p>
   <UsersList :users="users" />
 
+  <p class="px-4 font-[600]">Add new Task</p>
+
+  <TaskInput :todo="todo" />
+  <p class="px-4 font-[600]">Users</p>
   <div class="flex flex-wrap px-4">
     <!-- LIST OF AVAILABLE USERS -->
     <div
@@ -278,8 +283,6 @@ const addTaskToGroup = (list, task) => {
       <p class="text-[8px]">{{ user.role }}</p>
     </div>
   </div>
-
-  <TaskInput :todo="todo" />
   <div class="grid grid-cols-3 gap-4 px-4 max-sm:grid-cols-1">
     <ToDoList
       :listType="'todo'"

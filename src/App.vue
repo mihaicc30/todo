@@ -1,6 +1,6 @@
 <script setup>
-import ToDoApp from "./ToDoApp.vue";
-import Features from "./components/Features.vue";
+import ToDoApp from "@/ToDoApp.vue";
+import Features from "@/components/Features.vue";
 </script>
 
 <template>
