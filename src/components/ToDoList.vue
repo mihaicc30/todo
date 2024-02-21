@@ -36,7 +36,7 @@ let showRemoveButton = ref(false);
     @dragover.prevent
     @drop="dropTaskHandler(listType)"
     @dragleave="clearHoveredTaskElement"
-    class="flex flex-col gap-2 border-2 p-2"
+    class="flex flex-col gap-2 border-2 p-2 rounded-lg"
     id="todo"
   >
     <p class="text-center mb-2 border-b-2">To Do</p>
@@ -55,7 +55,7 @@ let showRemoveButton = ref(false);
         @dragleave="clearHoveredElement"
       >
         <input type="checkbox" v-model="task.completed" />
-        <p>{{ task.taskName }}</p>
+        <p class="flex-1 cursor-pointer">{{ task.taskName }}</p>
       </div>
       <div
         @dragenter="logHoveredElement(task.taskName, listType)"

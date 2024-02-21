@@ -2,6 +2,7 @@
 import TaskInput from "@/components/TaskInput.vue";
 import ToDoList from "@/components/ToDoList.vue";
 import UsersList from "@/components/UsersList.vue";
+import Features from "@/components/Features.vue";
 
 // useState
 import { ref } from "vue";
@@ -263,6 +264,8 @@ const addTaskToGroup = (list, task) => {
 </script>
 
 <template>
+  <p class="text-center font-bold text-5xl my-4">ToDo App</p>
+
   <p class="px-4 font-[600]">Add new user</p>
   <UsersList :users="users" />
 
@@ -274,7 +277,7 @@ const addTaskToGroup = (list, task) => {
     <!-- LIST OF AVAILABLE USERS -->
     <div
       v-for="user in users"
-      class="relative flex flex-col gap-x-2 border-2 m-1 p-2 rounded-lg"
+      class="relative flex flex-col gap-x-2 border-2 m-1 p-2 rounded-lg cursor-pointer"
       draggable="true"
       @dragstart="startDraggingUser(user)"
       @dragend="stopDraggingUser"
@@ -324,4 +327,6 @@ const addTaskToGroup = (list, task) => {
       :removeUser="removeUser"
     />
   </div>
+  <Features />
+
 </template>
