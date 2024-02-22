@@ -41,11 +41,11 @@ const jobs = reactive({
 const removeUser = (userToRemove, fromList, taskName) => {
   switch (fromList) {
     case "todo":
-      const todoTaskExists = todo.value.some(
+      const todoTaskExists = jobs.todo.some(
         (task) => task.taskName === taskName
       );
       if (todoTaskExists) {
-        todo.value = todo.value.map((tasky) => {
+        jobs.todo = jobs.todo.map((tasky) => {
           if (tasky.taskName === taskName) {
             return {
               ...tasky,
@@ -60,11 +60,11 @@ const removeUser = (userToRemove, fromList, taskName) => {
       }
       break;
     case "doing":
-      const doingTaskExists = doing.value.some(
+      const doingTaskExists = jobs.doing.some(
         (task) => task.taskName === taskName
       );
       if (doingTaskExists) {
-        doing.value = doing.value.map((tasky) => {
+        jobs.doing = jobs.doing.map((tasky) => {
           if (tasky.taskName === taskName) {
             return {
               ...tasky,
@@ -79,11 +79,11 @@ const removeUser = (userToRemove, fromList, taskName) => {
       }
       break;
     case "done":
-      const doneTaskExists = done.value.some(
+      const doneTaskExists = jobs.done.some(
         (task) => task.taskName === taskName
       );
       if (doneTaskExists) {
-        done.value = done.value.map((tasky) => {
+        jobs.done = jobs.done.map((tasky) => {
           if (tasky.taskName === taskName) {
             return {
               ...tasky,
@@ -277,7 +277,7 @@ const addTaskToGroup = (list, task) => {
 
   <p class="px-4 font-[600]">Add new Task</p>
 
-  <TaskInput :todo="jobs.todo" :jobs="jobs"/>
+  <TaskInput :todo="jobs.todo" :jobs="jobs" />
 
   <p class="px-4 font-[600]">Users</p>
   <div class="flex flex-wrap px-4">
