@@ -90,7 +90,7 @@ let showRemoveButton = ref(false);
           v-if="task.assignedToDo.length > 0"
           v-for="user in task.assignedToDo"
           :key="user.name"
-          class="relative flex flex-col gap-x-2 border-2 m-1 p-1 text-xs items-center rounded-lg"
+          class="relative flex flex-col gap-x-2 border-2 m-1 p-1 text-xs items-center rounded-lg min-w-[40px]"
           @mouseenter="
             showRemoveButton = {
               userName: user.name,
@@ -108,9 +108,9 @@ let showRemoveButton = ref(false);
               showRemoveButton.taskName === task.taskName
             "
             @click="removeUser(user, listType, task.taskName)"
-            class="bg-white/50 rounded-full absolute w-full h-full text-3xl font-bold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center"
+            class="bg-white/70 rounded-full absolute w-full h-full font-bold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center"
           >
-            X
+           ✖
           </button>
         </div>
       </div>

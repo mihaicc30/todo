@@ -22,7 +22,7 @@ const addNewTask = () => {
 </script>
 
 <template>
-  <div class="flex flex-nowrap gap-2 px-4">
+  <div class="flex flex-nowrap gap-2 px-4 my-2 bg-gray-200 mx-4 rounded-lg">
     <button
       v-if="newTaskInput.length > 0"
       @click="newTaskInput = ''"
@@ -35,9 +35,10 @@ const addNewTask = () => {
       v-model="newTaskInput"
       @keyup.enter="addNewTask"
       placeholder="New task..."
-      class="p-4 border-b-2 w-full outline-none"
+      class="px-4 py-2 my-2 rounded-lg w-full outline-none"
       :class="{
-        'border-red-400': newTaskInput.length > 0 && newTaskInput.length < 3,
+        'ring-2 ring-red-400':
+          newTaskInput.length > 0 && newTaskInput.length < 3,
       }"
     />
     <button
@@ -45,7 +46,19 @@ const addNewTask = () => {
       @click="addNewTask"
       class="p-2 mr-2 border-2 rounded-lg"
     >
-      ▶
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        class="size-10"
+      >
+        <path
+          stroke="#363636"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="m10 16 4-4-4-4"
+        />
+      </svg>
     </button>
   </div>
 </template>

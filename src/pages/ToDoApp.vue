@@ -6,13 +6,16 @@ import Features from "@/components/Features.vue";
 
 // useState
 import { reactive, ref } from "vue";
+let showDeleteButton = ref(false);
 
 let users = ref([
   { name: "Mihai", role: "JSD" },
-  { name: "Joe", role: "JSD" },
-  { name: "Dan", role: "JSD" },
+  { name: "Joe", role: "LSD" },
+  { name: "Dan", role: "CTO" },
+  // JSD == junior software developer
+  // LSD == lead software developer
+  // CTO == chief tech officer
 ]);
-// JSD == junior software developer
 const jobs = reactive({
   todo: ref([
     {
@@ -103,6 +106,12 @@ const removeUser = (userToRemove, fromList, taskName) => {
   }
 };
 
+const handleDeleteUser = (userName) => {
+  const userIndex = users.value.findIndex((user) => user.name === userName);
+  if (userIndex !== -1) {
+    users.value.splice(userIndex, 1);
+  }
+};
 const handleDeleteTask = (taskDescription, taskList) => {
   switch (taskList) {
     case "todo":
@@ -304,25 +313,34 @@ const addTaskToGroup = (list, task) => {
 <template>
   <p class="text-center font-bold text-5xl my-4">ToDo App</p>
 
-  <p class="px-4 font-[600]">Add new user</p>
+  <p class="px-4 font-[600] my-2">Add new user</p>
   <UserInput :users="users" />
 
-  <p class="px-4 font-[600]">Add new Task</p>
+  <p class="px-4 font-[600] my-2">Add new Task</p>
 
   <TaskInput :todo="jobs.todo" :jobs="jobs" />
 
-  <p class="px-4 font-[600]">Users</p>
-  <div class="flex flex-wrap px-4">
+  <p class="px-4 font-[600] my-2">Users</p>
+  <div class="flex flex-wrap px-4 mx-4 rounded-lg my-2 bg-gray-200">
     <!-- LIST OF AVAILABLE USERS -->
     <div
       v-for="user in users"
-      class="relative flex flex-col gap-x-2 border-2 m-1 p-2 rounded-lg cursor-pointer"
+      class="relative flex flex-col gap-x-2 border-2 m-1 p-2 rounded-lg cursor-pointer bg-white"
       draggable="true"
       @dragstart="startDraggingUser(user)"
       @dragend="stopDraggingUser"
+      @click="handleDeleteUser(user.name)"
+      @mouseenter="showDeleteButton = user.name"
+      @mouseleave="showDeleteButton = null"
     >
       <p class="border-b-2">{{ user.name }}</p>
       <p class="text-[8px]">{{ user.role }}</p>
+      <button
+        v-if="showDeleteButton === user.name"
+        class="absolute inset-0 bg-white/70"
+      >
+        ✖
+      </button>
     </div>
   </div>
 
