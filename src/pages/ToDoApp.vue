@@ -103,6 +103,38 @@ const removeUser = (userToRemove, fromList, taskName) => {
   }
 };
 
+const handleDeleteTask = (taskDescription, taskList) => {
+  switch (taskList) {
+    case "todo":
+      const todoIndex = jobs.todo.findIndex(
+        (task) => task.taskName === taskDescription
+      );
+      if (todoIndex !== -1) {
+        jobs.todo.splice(todoIndex, 1);
+      }
+      break;
+    case "doing":
+      const doingIndex = jobs.doing.findIndex(
+        (task) => task.taskName === taskDescription
+      );
+      if (doingIndex !== -1) {
+        jobs.doing.splice(doingIndex, 1);
+      }
+      break;
+    case "done":
+      const doneIndex = jobs.done.findIndex(
+        (task) => task.taskName === taskDescription
+      );
+      if (doneIndex !== -1) {
+        jobs.done.splice(doneIndex, 1);
+      }
+      break;
+
+    default:
+      break;
+  }
+};
+
 // USER DRAGGING EVENTS
 let draggingElement = ref(null);
 let hoveredElement = null;
@@ -306,6 +338,7 @@ const addTaskToGroup = (list, task) => {
       :dropTaskHandler="dropTaskHandler"
       :logHoveredElement="logHoveredElement"
       :clearHoveredElement="clearHoveredElement"
+      :handleDeleteTask="handleDeleteTask"
       :dropHandler="dropHandler"
       :removeUser="removeUser"
     />
@@ -320,6 +353,7 @@ const addTaskToGroup = (list, task) => {
       :dropTaskHandler="dropTaskHandler"
       :logHoveredElement="logHoveredElement"
       :clearHoveredElement="clearHoveredElement"
+      :handleDeleteTask="handleDeleteTask"
       :dropHandler="dropHandler"
       :removeUser="removeUser"
     />
@@ -334,6 +368,7 @@ const addTaskToGroup = (list, task) => {
       :dropTaskHandler="dropTaskHandler"
       :logHoveredElement="logHoveredElement"
       :clearHoveredElement="clearHoveredElement"
+      :handleDeleteTask="handleDeleteTask"
       :dropHandler="dropHandler"
       :removeUser="removeUser"
     />
