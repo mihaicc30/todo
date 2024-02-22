@@ -1,18 +1,22 @@
 <script setup>
 import { ref } from "vue";
 
-const { todo } = defineProps(["todo"]);
+const { todo, jobs } = defineProps(["todo", "jobs"]);
 let newTaskInput = ref("");
 
 const addNewTask = () => {
   if (newTaskInput.value.length > 2) {
-    todo.push({
-      completed: false,
-      taskName: newTaskInput.value,
-      assignedToDo: [],
-      list: "todo",
-    });
-    newTaskInput.value = "";
+    try {
+      jobs.todo.push({
+        completed: false,
+        taskName: newTaskInput.value,
+        assignedToDo: [],
+        list: "todo",
+      });
+      newTaskInput.value = "";
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 </script>

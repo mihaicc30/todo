@@ -1,11 +1,11 @@
 <script setup>
 import TaskInput from "@/components/TaskInput.vue";
 import ToDoList from "@/components/ToDoList.vue";
-import UsersList from "@/components/UsersList.vue";
+import UserInput from "@/components/UserInput.vue";
 import Features from "@/components/Features.vue";
 
 // useState
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 let users = ref([
   { name: "Mihai", role: "JSD" },
@@ -13,29 +13,30 @@ let users = ref([
   { name: "Dan", role: "JSD" },
 ]);
 // JSD == junior software developer
-
-let todo = ref([
-  {
-    completed: false,
-    taskName: "Work on A",
-    assignedToDo: [],
-    list: "todo",
-  },
-  {
-    completed: false,
-    taskName: "Work on B",
-    assignedToDo: [{ name: "Mihai", role: "JSD" }],
-    list: "todo",
-  },
-  {
-    completed: false,
-    taskName: "Work on C",
-    assignedToDo: [],
-    list: "todo",
-  },
-]);
-let doing = ref([]);
-let done = ref([]);
+const jobs = reactive({
+  todo: ref([
+    {
+      completed: false,
+      taskName: "Work on A",
+      assignedToDo: [],
+      list: "todo",
+    },
+    {
+      completed: false,
+      taskName: "Work on B",
+      assignedToDo: [{ name: "Mihai", role: "JSD" }],
+      list: "todo",
+    },
+    {
+      completed: false,
+      taskName: "Work on C",
+      assignedToDo: [],
+      list: "todo",
+    },
+  ]),
+  doing: ref([]),
+  done: ref([]),
+});
 
 const removeUser = (userToRemove, fromList, taskName) => {
   switch (fromList) {
@@ -132,7 +133,7 @@ const dropHandler = (targetList, event, task) => {
 const addUser = (userToAdd, toList, taskName) => {
   switch (toList) {
     case "todo":
-      const todoTargetTask = todo.value.find(
+      const todoTargetTask = jobs.todo.find(
         (task) => task.taskName === taskName
       );
       const userExists = todoTargetTask.assignedToDo.some(
@@ -150,7 +151,7 @@ const addUser = (userToAdd, toList, taskName) => {
       }
       break;
     case "doing":
-      const doingTargetTask = doing.value.find(
+      const doingTargetTask = jobs.doing.find(
         (task) => task.taskName === taskName
       );
       const userExists1 = doingTargetTask.assignedToDo.some(
@@ -168,7 +169,7 @@ const addUser = (userToAdd, toList, taskName) => {
       }
       break;
     case "done":
-      const doneTargetTask = done.value.find(
+      const doneTargetTask = jobs.done.find(
         (task) => task.taskName === taskName
       );
       const userExists2 = doneTargetTask.assignedToDo.some(
@@ -208,10 +209,6 @@ const stopDraggingTask = () => {
 const dropTaskHandler = (list) => {
   // event.preventDefault();
   if (draggingTaskElement.value) {
-    // Assuming 'list' is an array in the props
-    const index = todo.value.indexOf(draggingTaskElement.value);
-
-    // remove task from initial group
     removeTaskFromInitialGroup(
       draggingTaskElement.value.list,
       draggingTaskElement.value.taskName
@@ -224,13 +221,22 @@ const dropTaskHandler = (list) => {
 const removeTaskFromInitialGroup = (list, task) => {
   switch (list) {
     case "todo":
-      todo.value = todo.value.filter((tasky) => tasky.taskName !== task);
+      // Check if jobs.todo.value is defined before filtering
+      if (jobs.todo) {
+        jobs.todo = jobs.todo.filter((tasky) => tasky.taskName !== task);
+      }
       break;
     case "doing":
-      doing.value = doing.value.filter((tasky) => tasky.taskName !== task);
+      // Check if jobs.doing is defined before filtering
+      if (jobs.doing) {
+        jobs.doing = jobs.doing.filter((tasky) => tasky.taskName !== task);
+      }
       break;
     case "done":
-      done.value = done.value.filter((tasky) => tasky.taskName !== task);
+      // Check if jobs.done is defined before filtering
+      if (jobs.done) {
+        jobs.done = jobs.done.filter((tasky) => tasky.taskName !== task);
+      }
       break;
     default:
       break;
@@ -240,19 +246,19 @@ const removeTaskFromInitialGroup = (list, task) => {
 const addTaskToGroup = (list, task) => {
   switch (list) {
     case "todo":
-      todo.value.push({
+      jobs.todo.push({
         ...task,
         list: list,
       });
       break;
     case "doing":
-      doing.value.push({
+      jobs.doing.push({
         ...task,
         list: list,
       });
       break;
     case "done":
-      done.value.push({
+      jobs.done.push({
         ...task,
         list: list,
       });
@@ -267,12 +273,11 @@ const addTaskToGroup = (list, task) => {
   <p class="text-center font-bold text-5xl my-4">ToDo App</p>
 
   <p class="px-4 font-[600]">Add new user</p>
-  <UsersList :users="users" />
+  <UserInput :users="users" />
 
   <p class="px-4 font-[600]">Add new Task</p>
 
-  <TaskInput :todo="todo" />
-
+  <TaskInput :todo="jobs.todo" :jobs="jobs"/>
 
   <p class="px-4 font-[600]">Users</p>
   <div class="flex flex-wrap px-4">
@@ -288,12 +293,12 @@ const addTaskToGroup = (list, task) => {
       <p class="text-[8px]">{{ user.role }}</p>
     </div>
   </div>
-  
 
   <div class="grid grid-cols-3 gap-4 px-4 max-sm:grid-cols-1">
     <ToDoList
       :listType="'todo'"
-      :todo="todo"
+      :jobs="jobs"
+      :todo="jobs.todo"
       :logHoveredTaskElement="logHoveredTaskElement"
       :clearHoveredTaskElement="clearHoveredTaskElement"
       :startDraggingTask="startDraggingTask"
@@ -306,7 +311,8 @@ const addTaskToGroup = (list, task) => {
     />
     <ToDoList
       :listType="'doing'"
-      :todo="doing"
+      :jobs="jobs"
+      :todo="jobs.doing"
       :logHoveredTaskElement="logHoveredTaskElement"
       :clearHoveredTaskElement="clearHoveredTaskElement"
       :startDraggingTask="startDraggingTask"
@@ -319,7 +325,8 @@ const addTaskToGroup = (list, task) => {
     />
     <ToDoList
       :listType="'done'"
-      :todo="done"
+      :jobs="jobs"
+      :todo="jobs.done"
       :logHoveredTaskElement="logHoveredTaskElement"
       :clearHoveredTaskElement="clearHoveredTaskElement"
       :startDraggingTask="startDraggingTask"

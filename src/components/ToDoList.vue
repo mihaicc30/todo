@@ -28,6 +28,7 @@ const {
 import { ref } from "vue";
 
 let showRemoveButton = ref(false);
+
 </script>
 
 <template>
@@ -36,19 +37,19 @@ let showRemoveButton = ref(false);
     @dragover.prevent
     @drop="dropTaskHandler(listType)"
     @dragleave="clearHoveredTaskElement"
-    class="flex flex-col gap-2 border-2 p-2 rounded-lg"
+    class="flex flex-col gap-2 border-2 p-2 rounded-lg bg-gray-200"
     id="todo"
   >
-    <p class="text-center mb-2 border-b-2">To Do</p>
+    <p class="text-center mb-2 border-b-2 capitalize">{{ listType }}</p>
     <!-- LIST OF TASKS -->
-    <div v-for="task in todo" class="flex flex-col gap-2">
+    <div v-for="task in todo" class="flex flex-col gap-2 p-2 bg-white rounded-lg">
       <div
         draggable="true"
         @dragstart="startDraggingTask(task)"
         @dragend="stopDraggingTask"
+        class="flex flex-nowrap gap-2 w-full"
         :class="{ 'line-through': task.completed }"
         @click="task.completed = !task.completed"
-        class="flex flex-nowrap gap-2 w-full"
         @dragenter="logHoveredElement(task.taskName, listType)"
         @dragover.prevent
         @drop="dropHandler(`${listType}`, $event, task)"
