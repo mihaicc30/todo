@@ -272,6 +272,8 @@ const addTaskToGroup = (list, task) => {
   <p class="px-4 font-[600]">Add new Task</p>
 
   <TaskInput :todo="todo" />
+
+
   <p class="px-4 font-[600]">Users</p>
   <div class="flex flex-wrap px-4">
     <!-- LIST OF AVAILABLE USERS -->
@@ -286,6 +288,8 @@ const addTaskToGroup = (list, task) => {
       <p class="text-[8px]">{{ user.role }}</p>
     </div>
   </div>
+  
+
   <div class="grid grid-cols-3 gap-4 px-4 max-sm:grid-cols-1">
     <ToDoList
       :listType="'todo'"
@@ -328,5 +332,4 @@ const addTaskToGroup = (list, task) => {
     />
   </div>
   <Features />
-
 </template>

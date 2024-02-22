@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col my-20 px-4">
-    <p>Key Features</p>
+  <div class="flex flex-col my-20 px-4 max-w-[600px] mx-auto" >
+    <p class="text-center text-xl mb-2">Key Features</p>
     <li>Facility to add new users and tasks.</li>
     <li>
       Effortless task management through drag-and-drop functionality to

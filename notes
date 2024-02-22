@@ -1,0 +1,51 @@
+vue notes
+data (ref) | reactive | computed | watch | onMounted | defineProps | defineEmits | 
+
+
+
+
+
+
+
+v-"whatever" === @"whatever"
+
+store = useContext
+
+ref = useRef
+
+v-on:click || @click = onClick   prop
+
+v-for = {x.map((name,index)=> ... )}
+<div v-for="person in people">  {{ person }} </div>
+
+computed = useEffect
+
+const name = ref("")
+input v-model="name"  ===     input value={name}
+
+v-bind:href="{{name}}"  === href="bla bla"
+
+v-if="newTaskInput.length > 0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Davi Looy
+naxeyo5206@ricorit.com
+Davilooy123$n

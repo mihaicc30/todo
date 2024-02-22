@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import App from "@/App.vue";
-import ToDoApp from "@/pages/ToDoApp.vue";
 import Landing from "@/pages/Landing.vue";
+import ToDoApp from "@/pages/ToDoApp.vue";
+import About from "@/pages/About.vue";
+import Contact from "@/pages/Contact.vue";
 
 export default createRouter({
   history: createWebHistory(),
@@ -14,6 +15,14 @@ export default createRouter({
       path: "/app",
       component: ToDoApp,
     },
+    {
+      path: "/about",
+      component: About,
+    },
+    {
+      path: "/contact",
+      component: Contact,
+    },
   ],
-  linkActiveClass: "active",
+  linkActiveClass: "font-bold",
 });
