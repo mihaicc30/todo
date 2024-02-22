@@ -11,7 +11,7 @@ const {
   clearHoveredElement,
   dropHandler,
   removeUser,
-  handleDeleteTask
+  handleDeleteTask,
 } = defineProps([
   "listType",
   "todo",
@@ -24,7 +24,7 @@ const {
   "clearHoveredElement",
   "dropHandler",
   "removeUser",
-  "handleDeleteTask"
+  "handleDeleteTask",
 ]);
 
 import { ref } from "vue";
@@ -46,18 +46,18 @@ let showRemoveButton = ref(false);
     <div
       v-for="task in todo"
       class="flex flex-col gap-2 p-2 bg-white rounded-lg"
+      draggable="true"
+      @dragstart="startDraggingTask(task)"
+      @dragend="stopDraggingTask"
+      @dragenter="logHoveredElement(task.taskName, listType)"
+      @dragover.prevent
+      @drop="dropHandler(`${listType}`, $event, task)"
+      @dragleave="clearHoveredElement"
     >
       <div
-        draggable="true"
-        @dragstart="startDraggingTask(task)"
-        @dragend="stopDraggingTask"
         class="flex flex-nowrap gap-2 w-full cursor-pointer"
         :class="{ 'line-through': task.completed }"
         @click="task.completed = !task.completed"
-        @dragenter="logHoveredElement(task.taskName, listType)"
-        @dragover.prevent
-        @drop="dropHandler(`${listType}`, $event, task)"
-        @dragleave="clearHoveredElement"
       >
         <input type="checkbox" v-model="task.completed" />
         <p class="flex-1 font-[600]">{{ task.taskName }}</p>
@@ -110,12 +110,18 @@ let showRemoveButton = ref(false);
             @click="removeUser(user, listType, task.taskName)"
             class="bg-white/70 rounded-full absolute w-full h-full font-bold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center items-center"
           >
-           ✖
+            ✖
           </button>
         </div>
       </div>
       <div class="flex justify-end">
-        <svg @click="handleDeleteTask(task.taskName, task.list)" class="size-6 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg
+          @click="handleDeleteTask(task.taskName, task.list)"
+          class="size-6 cursor-pointer"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
           <g
             stroke="#292929"
             strokeLinecap="round"

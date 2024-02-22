@@ -321,7 +321,7 @@ const addTaskToGroup = (list, task) => {
   <TaskInput :todo="jobs.todo" :jobs="jobs" />
 
   <p class="px-4 font-[600] my-2">Users</p>
-  <div class="flex flex-wrap px-4 mx-4 rounded-lg my-2 bg-gray-200">
+  <div class="flex flex-wrap px-4 py-2 mx-4 rounded-lg my-2 bg-gray-200">
     <!-- LIST OF AVAILABLE USERS -->
     <div
       v-for="user in users"
@@ -344,7 +344,7 @@ const addTaskToGroup = (list, task) => {
     </div>
   </div>
 
-  <div class="grid grid-cols-3 gap-4 px-4 max-sm:grid-cols-1">
+  <div class="grid grid-cols-3 gap-4 px-4 max-sm:grid-cols-1 py-2">
     <ToDoList
       :listType="'todo'"
       :jobs="jobs"

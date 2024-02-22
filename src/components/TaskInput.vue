@@ -35,7 +35,7 @@ const addNewTask = () => {
       v-model="newTaskInput"
       @keyup.enter="addNewTask"
       placeholder="New task..."
-      class="px-4 py-2 my-2 rounded-lg w-full outline-none"
+      class="px-4 py-2 my-4 rounded-lg w-full outline-none"
       :class="{
         'ring-2 ring-red-400':
           newTaskInput.length > 0 && newTaskInput.length < 3,
